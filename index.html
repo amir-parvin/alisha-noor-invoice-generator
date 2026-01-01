@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator - Alisha Noor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #F7F5F0;
+            --dusty-rose: #D4A5A5;
+            --sage: #A8B5A0;
+            --charcoal: #4A4A4A;
+            --light-gray: #E8E6E1;
+            --dark-plum: #5C4A4A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--cream);
+            color: var(--charcoal);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Form Panel */
+        .form-panel {
+            width: 420px;
+            background: #fff;
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 100vh;
+            border-right: 1px solid var(--light-gray);
+        }
+
+        .form-panel h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            color: var(--dark-plum);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--sage);
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .form-section h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--dark-plum);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--dusty-rose);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* Items Section */
+        .items-form {
+            background: var(--cream);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .item-entry {
+            display: grid;
+            grid-template-columns: 1fr 60px 80px auto;
+            gap: 8px;
+            align-items: end;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--light-gray);
+        }
+
+        .item-entry:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .item-entry input {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+
+        .btn-remove {
+            background: var(--dusty-rose);
+            color: #fff;
+            border: none;
+            width: 32px;
+            height: 38px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .btn-remove:hover {
+            background: var(--dark-plum);
+        }
+
+        .btn-add {
+            background: var(--sage);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: background 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-add:hover {
+            background: #8fa586;
+        }
+
+        /* Summary */
+        .summary-box {
+            background: var(--cream);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .summary-row.total {
+            border-top: 2px solid var(--sage);
+            margin-top: 8px;
+            padding-top: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--dark-plum);
+        }
+
+        /* Print Button */
+        .btn-print {
+            background: var(--dark-plum);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: background 0.2s;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-print:hover {
+            background: #4a3a3a;
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Invoice Styles */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        .invoice-container {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            padding: 12mm 15mm;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .logo-section img {
+            width: 120px;
+            height: auto;
+        }
+
+        .invoice-title {
+            text-align: right;
+        }
+
+        .invoice-title h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            font-weight: 400;
+            color: var(--dark-plum);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .invoice-meta {
+            font-size: 10px;
+            color: var(--charcoal);
+        }
+
+        .invoice-meta p {
+            margin: 4px 0;
+        }
+
+        .invoice-meta span {
+            display: inline-block;
+            min-width: 90px;
+            border-bottom: 1px dotted var(--dusty-rose);
+            margin-left: 5px;
+            padding: 1px 8px;
+        }
+
+        .billing-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .billing-box h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--dark-plum);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--sage);
+        }
+
+        .billing-box .field {
+            margin: 6px 0;
+            display: flex;
+            align-items: baseline;
+            font-size: 11px;
+        }
+
+        .billing-box .field label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            min-width: 55px;
+        }
+
+        .billing-box .field .line {
+            flex: 1;
+            border-bottom: 1px dotted var(--dusty-rose);
+            min-height: 16px;
+            margin-left: 8px;
+            padding: 0 4px;
+        }
+
+        .items-section {
+            margin-bottom: 15px;
+        }
+
+        .items-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--dark-plum);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        thead {
+            background: var(--cream);
+        }
+
+        th {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            color: var(--dark-plum);
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 2px solid var(--sage);
+        }
+
+        th:nth-child(3),
+        th:nth-child(4),
+        th:nth-child(5) {
+            text-align: right;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--light-gray);
+            vertical-align: middle;
+        }
+
+        td:nth-child(3),
+        td:nth-child(4),
+        td:nth-child(5) {
+            text-align: right;
+        }
+
+        .item-row td {
+            height: 32px;
+        }
+
+        .totals-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .totals-box {
+            width: 240px;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 10px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .totals-row.grand-total {
+            border-bottom: none;
+            border-top: 2px solid var(--sage);
+            margin-top: 6px;
+            padding-top: 10px;
+        }
+
+        .totals-row.grand-total span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-plum);
+        }
+
+        .footer-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .footer-box h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--dark-plum);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .footer-box ul {
+            list-style: none;
+        }
+
+        .footer-box li {
+            font-size: 8.5px;
+            color: #666;
+            margin: 5px 0;
+            padding-left: 12px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .footer-box li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 4px;
+            height: 4px;
+            background: var(--dusty-rose);
+            border-radius: 50%;
+        }
+
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            padding-top: 15px;
+        }
+
+        .signature-box {
+            text-align: center;
+            width: 160px;
+        }
+
+        .signature-line {
+            border-top: 1px solid var(--charcoal);
+            margin-bottom: 5px;
+            margin-top: 35px;
+        }
+
+        .signature-box p {
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+        }
+
+        .contact-footer {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .contact-footer p {
+            font-size: 9px;
+            color: #888;
+            margin: 2px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 12px;
+            font-style: italic;
+            color: var(--dusty-rose);
+            margin-top: 8px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: #fff;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .form-panel {
+                display: none !important;
+            }
+
+            .preview-panel {
+                padding: 0;
+            }
+
+            .invoice-container {
+                box-shadow: none;
+                padding: 10mm 12mm;
+            }
+
+            .app-container {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Form Panel -->
+        <div class="form-panel">
+            <h2>Invoice Generator</h2>
+
+            <!-- Invoice Details -->
+            <div class="form-section">
+                <h3>Invoice Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Invoice No</label>
+                        <input type="text" id="invoiceNo" placeholder="INV0001" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="invoiceDate" oninput="updatePreview()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Details -->
+            <div class="form-section">
+                <h3>Customer Details</h3>
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="customerName" placeholder="Customer name" oninput="updatePreview()">
+                    </div>
+                </div>
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" id="customerPhone" placeholder="01XXXXXXXXX" oninput="updatePreview()">
+                    </div>
+                </div>
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea id="customerAddress" placeholder="Full delivery address" oninput="updatePreview()"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="form-section">
+                <h3>Payment Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Method</label>
+                        <select id="paymentMethod" onchange="updatePreview()">
+                            <option value="COD">COD</option>
+                            <option value="bKash">bKash</option>
+                            <option value="Nagad">Nagad</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="paymentStatus" onchange="updatePreview()">
+                            <option value="">-</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Partial">Partial</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label>Transaction ID</label>
+                        <input type="text" id="trxId" placeholder="Transaction ID (if applicable)" oninput="updatePreview()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items -->
+            <div class="form-section">
+                <h3>Order Items</h3>
+                <div class="items-form" id="itemsContainer">
+                    <div class="item-entry">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="item-desc" placeholder="Product name" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Qty</label>
+                            <input type="number" class="item-qty" value="1" min="1" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Price (৳)</label>
+                            <input type="number" class="item-price" placeholder="0" oninput="updatePreview()">
+                        </div>
+                        <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-add" onclick="addItem()">+ Add Item</button>
+            </div>
+
+            <!-- Delivery Charge -->
+            <div class="form-section">
+                <h3>Additional Charges</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Delivery (৳)</label>
+                        <input type="number" id="deliveryCharge" value="120" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Discount (৳)</label>
+                        <input type="number" id="discount" value="0" oninput="updatePreview()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="form-section">
+                <h3>Summary</h3>
+                <div class="summary-box">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="summarySubtotal">৳ 0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery</span>
+                        <span id="summaryDelivery">৳ 120</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Discount</span>
+                        <span id="summaryDiscount">- ৳ 0</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="summaryTotal">৳ 120</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-print" onclick="window.print()">Print / Save PDF</button>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="preview-panel">
+            <div class="invoice-container">
+                <!-- Header -->
+                <div class="header">
+                    <div class="logo-section">
+                        <img src="https://i.ibb.co.com/Wv1JVfSv/alisha-noor.png" alt="Alisha Noor">
+                    </div>
+                    <div class="invoice-title">
+                        <h1>Invoice</h1>
+                        <div class="invoice-meta">
+                            <p>Invoice No: <span id="previewInvoiceNo"></span></p>
+                            <p>Date: <span id="previewDate"></span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Section -->
+                <div class="billing-section">
+                    <div class="billing-box">
+                        <h3>Bill To</h3>
+                        <div class="field">
+                            <label>Name</label>
+                            <div class="line" id="previewName"></div>
+                        </div>
+                        <div class="field">
+                            <label>Phone</label>
+                            <div class="line" id="previewPhone"></div>
+                        </div>
+                        <div class="field">
+                            <label>Address</label>
+                            <div class="line" id="previewAddress"></div>
+                        </div>
+                    </div>
+                    <div class="billing-box">
+                        <h3>Payment Details</h3>
+                        <div class="field">
+                            <label>Method</label>
+                            <div class="line" id="previewMethod"></div>
+                        </div>
+                        <div class="field">
+                            <label>Status</label>
+                            <div class="line" id="previewStatus"></div>
+                        </div>
+                        <div class="field">
+                            <label>Trx ID</label>
+                            <div class="line" id="previewTrxId"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Items Table -->
+                <div class="items-section">
+                    <h3>Order Details</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 50%;">Description</th>
+                                <th style="width: 12%;">Qty</th>
+                                <th style="width: 16%;">Unit Price</th>
+                                <th style="width: 17%;">Amount (৳)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="previewItems">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Totals -->
+                <div class="totals-section">
+                    <div class="totals-box">
+                        <div class="totals-row">
+                            <span>Subtotal</span>
+                            <span id="previewSubtotal">0</span>
+                        </div>
+                        <div class="totals-row">
+                            <span>Delivery Charge</span>
+                            <span id="previewDelivery">120</span>
+                        </div>
+                        <div class="totals-row" id="discountRow" style="display: none;">
+                            <span>Discount</span>
+                            <span id="previewDiscount">0</span>
+                        </div>
+                        <div class="totals-row grand-total">
+                            <span>Total (৳)</span>
+                            <span id="previewTotal">120</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Sections -->
+                <div class="footer-sections">
+                    <div class="footer-box">
+                        <h4>Delivery Guidelines</h4>
+                        <ul>
+                            <li>Inside Dhaka: 2-3 working days via courier service</li>
+                            <li>Outside Dhaka: 4-7 working days via courier service</li>
+                            <li>Please inspect the package in front of the delivery person</li>
+                            <li>No complaints accepted after receiving the parcel</li>
+                            <li>Ensure correct address & phone number for smooth delivery</li>
+                        </ul>
+                    </div>
+                    <div class="footer-box">
+                        <h4>Terms & Conditions</h4>
+                        <ul>
+                            <li>Must check the product in front of delivery man before receiving</li>
+                            <li>Return accepted only at delivery point with delivery charge deducted</li>
+                            <li>Slight color variation may occur due to photography/screen settings</li>
+                            <li>Custom orders and altered items are non-exchangeable</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Signature -->
+                <div class="signature-section">
+                    <div class="signature-box">
+                        <div class="signature-line"></div>
+                        <p>Customer Signature</p>
+                    </div>
+                    <div class="signature-box">
+                        <div class="signature-line"></div>
+                        <p>Authorized Signature</p>
+                    </div>
+                </div>
+
+                <!-- Contact Footer -->
+                <div class="contact-footer">
+                    <p>Apt-A1, House-5, Road-3, Dhanmondi, Dhaka-1205</p>
+                    <p>+880 1515-246675 &nbsp;•&nbsp; alishanoorbd@gmail.com</p>
+                    <p class="tagline">Embrace Your Inner Beauty</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date
+        document.getElementById('invoiceDate').valueAsDate = new Date();
+
+        // Generate next invoice number
+        const lastInvoice = localStorage.getItem('lastInvoiceNo') || 0;
+        const nextInvoice = parseInt(lastInvoice) + 1;
+        document.getElementById('invoiceNo').value = 'INV' + String(nextInvoice).padStart(4, '0');
+
+        function addItem() {
+            const container = document.getElementById('itemsContainer');
+            const entry = document.createElement('div');
+            entry.className = 'item-entry';
+            entry.innerHTML = `
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" class="item-desc" placeholder="Product name" oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label>Qty</label>
+                    <input type="number" class="item-qty" value="1" min="1" oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label>Price (৳)</label>
+                    <input type="number" class="item-price" placeholder="0" oninput="updatePreview()">
+                </div>
+                <button type="button" class="btn-remove" onclick="removeItem(this)">×</button>
+            `;
+            container.appendChild(entry);
+            updatePreview();
+        }
+
+        function removeItem(btn) {
+            const entries = document.querySelectorAll('.item-entry');
+            if (entries.length > 1) {
+                btn.parentElement.remove();
+                updatePreview();
+            }
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        function updatePreview() {
+            // Invoice details
+            document.getElementById('previewInvoiceNo').textContent = document.getElementById('invoiceNo').value;
+            document.getElementById('previewDate').textContent = formatDate(document.getElementById('invoiceDate').value);
+
+            // Customer details
+            document.getElementById('previewName').textContent = document.getElementById('customerName').value;
+            document.getElementById('previewPhone').textContent = document.getElementById('customerPhone').value;
+            document.getElementById('previewAddress').textContent = document.getElementById('customerAddress').value;
+
+            // Payment details
+            document.getElementById('previewMethod').textContent = document.getElementById('paymentMethod').value;
+            document.getElementById('previewStatus').textContent = document.getElementById('paymentStatus').value;
+            document.getElementById('previewTrxId').textContent = document.getElementById('trxId').value;
+
+            // Items
+            const items = document.querySelectorAll('.item-entry');
+            const tbody = document.getElementById('previewItems');
+            tbody.innerHTML = '';
+
+            let subtotal = 0;
+            let index = 1;
+
+            items.forEach(item => {
+                const desc = item.querySelector('.item-desc').value;
+                const qty = parseInt(item.querySelector('.item-qty').value) || 0;
+                const price = parseFloat(item.querySelector('.item-price').value) || 0;
+                const amount = qty * price;
+                subtotal += amount;
+
+                if (desc || price > 0) {
+                    const row = document.createElement('tr');
+                    row.className = 'item-row';
+                    row.innerHTML = `
+                        <td>${index}</td>
+                        <td>${desc || ''}</td>
+                        <td>${qty}</td>
+                        <td>${price.toLocaleString()}</td>
+                        <td>${amount.toLocaleString()}</td>
+                    `;
+                    tbody.appendChild(row);
+                    index++;
+                }
+            });
+
+            // Totals
+            const delivery = parseFloat(document.getElementById('deliveryCharge').value) || 0;
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const total = subtotal + delivery - discount;
+
+            document.getElementById('previewSubtotal').textContent = subtotal.toLocaleString();
+            document.getElementById('previewDelivery').textContent = delivery.toLocaleString();
+            document.getElementById('previewDiscount').textContent = discount.toLocaleString();
+            document.getElementById('previewTotal').textContent = total.toLocaleString();
+
+            // Show/hide discount row
+            document.getElementById('discountRow').style.display = discount > 0 ? 'flex' : 'none';
+
+            // Update summary
+            document.getElementById('summarySubtotal').textContent = '৳ ' + subtotal.toLocaleString();
+            document.getElementById('summaryDelivery').textContent = '৳ ' + delivery.toLocaleString();
+            document.getElementById('summaryDiscount').textContent = '- ৳ ' + discount.toLocaleString();
+            document.getElementById('summaryTotal').textContent = '৳ ' + total.toLocaleString();
+
+            // Save invoice number
+            const invoiceNo = document.getElementById('invoiceNo').value;
+            const num = parseInt(invoiceNo.replace('INV', '')) || 0;
+            localStorage.setItem('lastInvoiceNo', num);
+        }
+
+        // Initial update
+        updatePreview();
+    </script>
+</body>
+
+</html>
