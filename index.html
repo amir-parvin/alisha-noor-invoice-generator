@@ -13,9 +13,9 @@
             --cream: #F7F5F0;
             --dusty-rose: #D4A5A5;
             --sage: #A8B5A0;
-            --charcoal: #4A4A4A;
+            --charcoal: #333333;
             --light-gray: #E8E6E1;
-            --dark-plum: #5C4A4A;
+            --dark-plum: #4A3535;
         }
 
         * {
@@ -306,7 +306,7 @@
 
         .billing-box h3 {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             color: var(--dark-plum);
             text-transform: uppercase;
@@ -320,17 +320,17 @@
             margin: 8px 0;
             display: flex;
             align-items: baseline;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
         }
 
         .billing-box .field label {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #666;
-            min-width: 70px;
+            color: #555;
+            min-width: 75px;
         }
 
         .billing-box .field .line {
@@ -347,7 +347,7 @@
 
         .items-section h3 {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
             color: var(--dark-plum);
             text-transform: uppercase;
@@ -358,7 +358,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
         }
 
@@ -367,7 +367,7 @@
         }
 
         th {
-            font-size: 12px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
@@ -396,7 +396,7 @@
         }
 
         .item-row td {
-            height: 32px;
+            height: 36px;
         }
 
         .totals-section {
@@ -406,14 +406,14 @@
         }
 
         .totals-box {
-            width: 280px;
+            width: 300px;
         }
 
         .totals-row {
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
             border-bottom: 1px solid var(--light-gray);
         }
@@ -427,7 +427,7 @@
 
         .totals-row.grand-total span {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 600;
             color: var(--dark-plum);
         }
@@ -443,7 +443,7 @@
 
         .footer-box h4 {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--dark-plum);
             text-transform: uppercase;
@@ -456,9 +456,9 @@
         }
 
         .footer-box li {
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 500;
-            color: #555;
+            color: #444;
             margin: 6px 0;
             padding-left: 14px;
             position: relative;
@@ -485,7 +485,7 @@
 
         .signature-box {
             text-align: center;
-            width: 160px;
+            width: 200px;
         }
 
         .signature-line {
@@ -495,11 +495,11 @@
         }
 
         .signature-box p {
-            font-size: 11px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #666;
+            color: #444;
         }
 
         .contact-footer {
@@ -510,17 +510,17 @@
         }
 
         .contact-footer p {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
-            color: #666;
+            color: #444;
             margin: 3px 0;
             letter-spacing: 0.5px;
         }
 
         .tagline {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 18px;
+            font-weight: 600;
             font-style: italic;
             color: var(--dusty-rose);
             margin-top: 10px;
@@ -532,6 +532,7 @@
                 background: #fff;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+                -webkit-font-smoothing: antialiased;
             }
 
             .form-panel {
@@ -544,13 +545,39 @@
 
             .invoice-container {
                 box-shadow: none;
-                padding: 12mm 15mm;
+                padding: 10mm 12mm;
                 width: 100%;
                 max-width: none;
+                min-height: auto;
             }
 
             .app-container {
                 display: block;
+            }
+
+            .header {
+                margin-bottom: 18px;
+            }
+
+            .billing-section {
+                margin-bottom: 18px;
+            }
+
+            .items-section {
+                margin-bottom: 12px;
+            }
+
+            .totals-section {
+                margin-bottom: 16px;
+            }
+
+            .footer-sections {
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+
+            .signature-section {
+                margin-top: 20px;
             }
         }
     </style>
